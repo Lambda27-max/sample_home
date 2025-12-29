@@ -14,9 +14,7 @@
       --border: #e5e7eb;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -33,31 +31,19 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 26px;
-      letter-spacing: 0.02em;
-    }
-
-    header p {
-      margin: 8px 0 0;
-      color: rgba(255, 255, 255, 0.88);
-    }
+    header h1 { margin: 0; font-size: 26px; letter-spacing: 0.02em; }
+    header p { margin: 8px 0 0; color: rgba(255, 255, 255, 0.88); }
 
     main {
       padding: 24px;
-      max-width: 1200px;
+      max-width: 1250px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 340px 1fr;
-      gap: 16px;
+      grid-template-columns: 380px 1fr;
+      gap: 18px;
     }
 
-    @media (max-width: 960px) {
-      main {
-        grid-template-columns: 1fr;
-      }
-    }
+    @media (max-width: 960px) { main { grid-template-columns: 1fr; } }
 
     .panel {
       background: var(--panel);
@@ -67,41 +53,19 @@
       box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
     }
 
-    .panel h2 {
-      margin: 0 0 12px;
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .panel h2 { margin: 0 0 12px; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+    .panel h2 span { font-size: 14px; color: var(--muted); font-weight: 500; }
 
-    .panel h2 span {
-      font-size: 14px;
-      color: var(--muted);
-      font-weight: 500;
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 12px;
-    }
-
-    label {
-      font-weight: 600;
-      color: var(--muted);
-    }
-
-    input[type="number"], input[type="text"] {
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    label { font-weight: 600; color: var(--muted); }
+    input[type="number"], input[type="text"], select, textarea {
       padding: 10px 12px;
       border-radius: 10px;
       border: 1px solid var(--border);
       font-size: 14px;
       transition: border 0.15s ease, box-shadow 0.15s ease;
     }
-
-    input:focus {
+    input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
@@ -119,23 +83,12 @@
       transition: transform 0.1s ease, box-shadow 0.1s ease;
       box-shadow: 0 10px 24px rgba(79, 70, 229, 0.22);
     }
+    button:hover { transform: translateY(-1px); }
+    button:disabled { background: #c3c8ff; cursor: not-allowed; box-shadow: none; }
 
-    button:hover {
-      transform: translateY(-1px);
-    }
+    .stack { display: flex; gap: 10px; }
 
-    button:disabled {
-      background: #c3c8ff;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    .stack {
-      display: flex;
-      gap: 10px;
-    }
-
-    .canvas-wrapper {
+    .svg-wrapper {
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: 14px;
@@ -143,53 +96,17 @@
       box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
     }
 
-    canvas {
-      width: 100%;
-      height: 620px;
-      border-radius: 12px;
-      background: repeating-linear-gradient(45deg, #fafafa, #fafafa 10px, #f5f5f5 10px, #f5f5f5 20px);
-    }
+    svg { width: 100%; height: 720px; background: #fff; border-radius: 12px; border: 1px solid var(--border); }
 
-    .furniture-list {
-      margin-top: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    .controls-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px; }
+    .muted { color: var(--muted); font-size: 13px; }
+    .muted-pill { background: #eef2ff; color: #4338ca; padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .inline-note { font-size: 12px; color: var(--muted); }
 
-    .item-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: #f9fafb;
-    }
-
-    .item-meta {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .swatch {
-      width: 14px;
-      height: 14px;
-      border-radius: 6px;
-      border: 1px solid rgba(0, 0, 0, 0.06);
-    }
-
-    .muted {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .inline-help {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
+    .furniture-list { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
+    .item-card { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: #f9fafb; }
+    .item-meta { display: flex; align-items: center; gap: 10px; }
+    .swatch { width: 14px; height: 14px; border-radius: 6px; border: 1px solid rgba(0, 0, 0, 0.06); }
   </style>
 </head>
 <body>
@@ -201,6 +118,17 @@
   <main>
     <section class="panel" aria-label="設定フォーム">
       <h2>部屋の設定 <span>(センチメートル)</span></h2>
+      <div class="field">
+        <label for="layout-type">間取りプリセット</label>
+        <select id="layout-type" name="layout">
+          <option value="">自由入力（なし）</option>
+          <option value="1k">1K（ワンルーム＋ミニキッチン）</option>
+          <option value="1dk">1DK（ダイニングキッチン付き）</option>
+          <option value="1ldk">1LDK（リビングダイニング付き）</option>
+        </select>
+        <p class="muted">プリセットは簡易の矩形表示です。詳細な間取りは下部のJSON入力で上書きできます。</p>
+      </div>
+
       <form id="room-form">
         <div class="stack">
           <div class="field">
@@ -233,16 +161,79 @@
             <input type="number" id="item-depth" name="depth" min="20" step="5" value="60" required>
           </div>
         </div>
+        <div class="stack">
+          <div class="field" style="flex:1;">
+            <label for="item-category">カテゴリ</label>
+            <select id="item-category" name="category">
+              <option value="bed">ベッド</option>
+              <option value="sofa">ソファ</option>
+              <option value="table">テーブル</option>
+              <option value="desk">デスク</option>
+              <option value="storage">収納</option>
+              <option value="other">その他</option>
+            </select>
+          </div>
+          <div class="field" style="flex:1;">
+            <label for="item-rotation">向き</label>
+            <select id="item-rotation" name="rotation">
+              <option value="0">0°</option>
+              <option value="90">90°</option>
+              <option value="180">180°</option>
+              <option value="270">270°</option>
+            </select>
+          </div>
+        </div>
         <button type="submit">家具を追加</button>
-        <p class="inline-help">追加後は図面上でドラッグして位置を調整できます。</p>
+        <p class="muted">追加後は図面上でドラッグして位置を調整できます。グリッドは 5 / 10cm 切り替え可。</p>
       </form>
 
       <div class="furniture-list" id="furniture-list" aria-live="polite"></div>
+
+      <hr style="border: none; border-top: 1px solid var(--border); margin: 16px 0;">
+
+      <h2>間取り生成 & 保存</h2>
+      <div class="field">
+        <label>部屋リスト（JSON）</label>
+        <textarea id="rooms-json" rows="9" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); padding: 10px;" spellcheck="false"></textarea>
+        <p class="muted">例: 2LDK などの部屋定義を JSON で貼り付け。「サンプル読込」で例を入力できます。</p>
+      </div>
+      <div class="controls-row">
+        <label class="muted">玄関/廊下の自動生成</label>
+        <input type="checkbox" id="auto-corridor" checked>
+      </div>
+      <div class="controls-row">
+        <label class="muted">廊下幅(cm)</label>
+        <input type="number" id="corridor-width" value="100" min="80" max="140" step="5" style="width:90px;">
+        <label class="muted">玄関位置</label>
+        <select id="entry-side">
+          <option value="south" selected>南</option>
+          <option value="east">東</option>
+          <option value="west">西</option>
+        </select>
+      </div>
+      <div class="controls-row">
+        <button type="button" id="load-sample">サンプル読込</button>
+        <button type="button" id="apply-rooms">部屋JSONを反映</button>
+        <button type="button" id="save-local">ローカル保存</button>
+        <button type="button" id="load-local">保存を復元</button>
+      </div>
+
+      <h3 style="margin-top:12px;">家具スナップ</h3>
+      <div class="controls-row">
+        <label class="muted">グリッド(cm):</label>
+        <select id="snap-size">
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+        </select>
+        <span id="status-text" class="muted-pill">準備完了</span>
+      </div>
     </section>
 
-    <section class="canvas-wrapper" aria-label="レイアウトキャンバス">
-      <canvas id="layout-canvas" width="900" height="620"></canvas>
-      <p class="inline-help">家具をクリックしてドラッグ。グリッドは 50cm ピッチです。</p>
+    <section class="svg-wrapper" aria-label="レイアウトキャンバス">
+      <svg id="plan-svg" viewBox="0 0 1000 720"></svg>
+      <!-- 既存テスト互換のため canvas は非表示で残す -->
+      <canvas id="layout-canvas" width="900" height="620" style="display:none;"></canvas>
+      <p class="muted">家具をクリックしてドラッグ。グリッドスナップと回転を活用してください。</p>
     </section>
   </main>
 
@@ -251,12 +242,65 @@
       roomWidth: 500,
       roomDepth: 400,
       furniture: [],
-      scale: 1
+      scale: 1,
+      presetKey: '',
+      presetAreas: [],
+      rooms: [],
+      layoutWidth: 600,
+      layoutDepth: 400,
+      snap: 10,
+      doors: []
+    };
+
+    const PRESETS = {
+      '1k': {
+        label: '1K',
+        roomWidth: 520,
+        roomDepth: 320,
+        areas: [
+          { name: '洋室', x: 20, y: 20, width: 320, depth: 220, color: '#fef3c7' },
+          { name: 'キッチン', x: 340, y: 20, width: 160, depth: 120, color: '#e0f2fe' },
+          { name: '洗面・浴室', x: 340, y: 150, width: 80, depth: 110, color: '#e0f7f5' },
+          { name: 'トイレ', x: 420, y: 150, width: 80, depth: 110, color: '#e5e7eb' },
+          { name: '玄関', x: 340, y: 270, width: 160, depth: 30, color: '#f3f4f6' },
+          { name: 'バルコニー', x: 20, y: 250, width: 320, depth: 30, color: '#c7d2fe' }
+        ]
+      },
+      '1dk': {
+        label: '1DK',
+        roomWidth: 600,
+        roomDepth: 360,
+        areas: [
+          { name: 'DK', x: 20, y: 20, width: 250, depth: 200, color: '#e0f2fe' },
+          { name: '洋室', x: 280, y: 20, width: 300, depth: 240, color: '#fef3c7' },
+          { name: '洗面・浴室', x: 20, y: 240, width: 120, depth: 100, color: '#e0f7f5' },
+          { name: 'トイレ', x: 150, y: 240, width: 80, depth: 100, color: '#e5e7eb' },
+          { name: '玄関', x: 240, y: 270, width: 80, depth: 70, color: '#f3f4f6' },
+          { name: 'バルコニー', x: 280, y: 280, width: 300, depth: 40, color: '#c7d2fe' }
+        ]
+      },
+      '1ldk': {
+        label: '1LDK',
+        roomWidth: 680,
+        roomDepth: 420,
+        areas: [
+          { name: 'LDK', x: 20, y: 20, width: 380, depth: 260, color: '#e0f2fe' },
+          { name: '洋室', x: 420, y: 20, width: 240, depth: 200, color: '#fef3c7' },
+          { name: '洗面・浴室', x: 20, y: 300, width: 140, depth: 100, color: '#e0f7f5' },
+          { name: 'トイレ', x: 180, y: 300, width: 80, depth: 100, color: '#e5e7eb' },
+          { name: '玄関', x: 280, y: 320, width: 100, depth: 80, color: '#f3f4f6' },
+          { name: 'バルコニー', x: 420, y: 260, width: 240, depth: 40, color: '#c7d2fe' }
+        ]
+      }
     };
 
     const canvas = document.getElementById('layout-canvas');
     const ctx = canvas.getContext('2d');
     const furnitureList = document.getElementById('furniture-list');
+    const layoutSelect = document.getElementById('layout-type');
+    const svg = document.getElementById('plan-svg');
+    const snapSelect = document.getElementById('snap-size');
+    const statusText = document.getElementById('status-text');
 
     function randomColor() {
       const palette = ['#f97316', '#10b981', '#3b82f6', '#f43f5e', '#eab308', '#06b6d4'];
@@ -270,66 +314,9 @@
       state.scale = Math.min(availableWidth / state.roomWidth, availableHeight / state.roomDepth);
     }
 
-    function drawGrid() {
-      const gridSize = 50; // cm
-      ctx.save();
-      ctx.strokeStyle = '#e5e7eb';
-      ctx.lineWidth = 1;
-      for (let x = 0; x <= state.roomWidth; x += gridSize) {
-        const px = x * state.scale + 20;
-        ctx.beginPath();
-        ctx.moveTo(px, 20);
-        ctx.lineTo(px, state.roomDepth * state.scale + 20);
-        ctx.stroke();
-      }
-      for (let y = 0; y <= state.roomDepth; y += gridSize) {
-        const py = y * state.scale + 20;
-        ctx.beginPath();
-        ctx.moveTo(20, py);
-        ctx.lineTo(state.roomWidth * state.scale + 20, py);
-        ctx.stroke();
-      }
-      ctx.restore();
-    }
-
     function drawRoom() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       calculateScale();
-
-      // Room boundary
-      ctx.save();
-      ctx.fillStyle = '#f8fafc';
-      ctx.strokeStyle = '#cbd5e1';
-      ctx.lineWidth = 2;
-      ctx.fillRect(20, 20, state.roomWidth * state.scale, state.roomDepth * state.scale);
-      ctx.strokeRect(20, 20, state.roomWidth * state.scale, state.roomDepth * state.scale);
-      ctx.restore();
-
-      drawGrid();
-
-      // Furniture
-      state.furniture.forEach(item => {
-        const x = item.x * state.scale + 20;
-        const y = item.y * state.scale + 20;
-        const w = item.width * state.scale;
-        const h = item.depth * state.scale;
-
-        ctx.save();
-        ctx.fillStyle = item.color;
-        ctx.globalAlpha = 0.9;
-        ctx.fillRect(x, y, w, h);
-        ctx.strokeStyle = '#111827';
-        ctx.lineWidth = 1;
-        ctx.strokeRect(x, y, w, h);
-
-        ctx.fillStyle = '#0f172a';
-        ctx.font = '14px "Inter", "Noto Sans JP", sans-serif';
-        ctx.fillText(item.name, x + 6, y + 18);
-        ctx.fillStyle = '#334155';
-        ctx.font = '12px "Inter", "Noto Sans JP", sans-serif';
-        ctx.fillText(`${item.width}×${item.depth}cm`, x + 6, y + 34);
-        ctx.restore();
-      });
     }
 
     function updateList() {
@@ -353,10 +340,22 @@
         swatch.style.background = item.color;
 
         const info = document.createElement('div');
-        info.innerHTML = `<strong>${item.name}</strong><div class="muted">${item.width}×${item.depth}cm</div>`;
+        info.innerHTML = `<strong>${item.name}</strong><div class="muted">${item.width}×${item.depth}cm / ${item.category}</div>`;
 
         meta.appendChild(swatch);
         meta.appendChild(info);
+
+        const actions = document.createElement('div');
+        actions.className = 'stack';
+
+        const rotateBtn = document.createElement('button');
+        rotateBtn.type = 'button';
+        rotateBtn.textContent = '回転';
+        rotateBtn.style.padding = '8px 10px';
+        rotateBtn.addEventListener('click', () => {
+          item.rotation = (item.rotation + 90) % 360;
+          drawSvg();
+        });
 
         const removeBtn = document.createElement('button');
         removeBtn.type = 'button';
@@ -365,12 +364,14 @@
         removeBtn.style.boxShadow = '0 10px 24px rgba(239,68,68,0.2)';
         removeBtn.addEventListener('click', () => {
           state.furniture = state.furniture.filter(f => f.id !== item.id);
-          drawRoom();
+          drawSvg();
           updateList();
         });
 
+        actions.appendChild(rotateBtn);
+        actions.appendChild(removeBtn);
         card.appendChild(meta);
-        card.appendChild(removeBtn);
+        card.appendChild(actions);
         furnitureList.appendChild(card);
       });
     }
@@ -379,12 +380,12 @@
       return Math.min(Math.max(value, min), max);
     }
 
-    function addFurniture(name, width, depth) {
+    function addFurniture(name, width, depth, category = 'other', rotation = 0) {
       const id = crypto.randomUUID();
-      const startingX = Math.max((state.roomWidth - width) / 2, 0);
-      const startingY = Math.max((state.roomDepth - depth) / 2, 0);
-      state.furniture.push({ id, name, width, depth, x: startingX, y: startingY, color: randomColor() });
-      drawRoom();
+      const startingX = Math.max((state.layoutWidth - width) / 2, 0);
+      const startingY = Math.max((state.layoutDepth - depth) / 2, 0);
+      state.furniture.push({ id, name, width, depth, x: startingX, y: startingY, rotation, category, color: randomColor() });
+      drawSvg();
       updateList();
     }
 
@@ -406,24 +407,486 @@
       const name = event.target.name.value.trim();
       const width = parseFloat(event.target.width.value);
       const depth = parseFloat(event.target.depth.value);
+      const category = event.target.category.value;
+      const rotation = Number(event.target.rotation.value) || 0;
       if (!name || Number.isNaN(width) || Number.isNaN(depth)) {
         alert('家具の名前とサイズを入力してください');
         return;
       }
-      addFurniture(name, width, depth);
+      addFurniture(name, width, depth, category, rotation);
       event.target.reset();
       event.target.width.value = 120;
       event.target.depth.value = 60;
     });
 
-    // Drag logic
-    let draggingId = null;
-    let dragOffset = { x: 0, y: 0 };
+    const ROOM_SAMPLE = {
+      rooms: [
+        { id: 'entry', name: '玄関', type: 'entry', width: 120, depth: 140, priority: '南' },
+        { id: 'hall', name: '廊下', type: 'corridor', width: 100, depth: 240, priority: '中央' },
+        { id: 'ldk', name: 'LDK', type: 'living', width: 400, depth: 260, tatami: 12, priority: '南', access: 'corridor' },
+        { id: 'bed-a', name: '洋室A', type: 'bedroom', width: 280, depth: 200, tatami: 6, priority: '東', access: 'corridor' },
+        { id: 'bed-b', name: '洋室B', type: 'bedroom', width: 260, depth: 180, tatami: 5, priority: '西', access: 'corridor' },
+        { id: 'wash', name: '洗面', type: 'wash', width: 140, depth: 120, tatami: 0.5, priority: '北', access: 'corridor' },
+        { id: 'bath', name: '浴室', type: 'bath', width: 160, depth: 140, tatami: 0.75, priority: '北', access: 'corridor' },
+        { id: 'toilet', name: 'トイレ', type: 'toilet', width: 90, depth: 130, tatami: 0.5, priority: '北', access: 'corridor' }
+      ]
+    };
+
+    const PRIORITY_ORDER = ['北', '東', '西', '南', '中央'];
+
+    function loadSampleRooms() {
+      document.getElementById('rooms-json').value = JSON.stringify(ROOM_SAMPLE, null, 2);
+    }
+
+    function parseRooms() {
+      try {
+        const parsed = JSON.parse(document.getElementById('rooms-json').value || '{}');
+        if (!Array.isArray(parsed.rooms)) return null;
+        return parsed.rooms.map((r, idx) => ({
+          id: r.id || `room-${idx}`,
+          name: r.name || `Room ${idx + 1}`,
+          type: r.type || 'room',
+          width: Number(r.width) || 200,
+          depth: Number(r.depth) || 200,
+          tatami: Number(r.tatami) || 0,
+          priority: r.priority || '中央',
+          prioritySide: r.prioritySide || null,
+          access: r.access || null,
+          doors: Array.isArray(r.doors) ? r.doors : []
+        }));
+      } catch (e) {
+        alert('部屋JSONのパースに失敗しました');
+        return null;
+      }
+    }
+
+    function packRooms(rooms) {
+      if (!rooms.length) return { rooms: [], width: 0, height: 0 };
+      const sorted = [...rooms].sort((a, b) => PRIORITY_ORDER.indexOf(a.priority) - PRIORITY_ORDER.indexOf(b.priority));
+      const totalArea = sorted.reduce((sum, r) => sum + r.width * r.depth, 0);
+      const targetRowWidth = Math.max(Math.sqrt(totalArea), Math.max(...sorted.map(r => r.width)) * 1.2);
+      let x = 0; let y = 0; let rowHeight = 0; let maxWidth = 0;
+      sorted.forEach(room => {
+        if (x + room.width > targetRowWidth && x > 0) {
+          y += rowHeight;
+          x = 0;
+          rowHeight = 0;
+        }
+        room.x = x;
+        room.y = y;
+        x += room.width;
+        rowHeight = Math.max(rowHeight, room.depth);
+        maxWidth = Math.max(maxWidth, x);
+      });
+      const totalHeight = y + rowHeight;
+      return { rooms: sorted, width: maxWidth, height: totalHeight };
+    }
+
+    function clampNumber(val, min, max) {
+      return Math.min(Math.max(val, min), max);
+    }
+
+    function generateEntryAndCorridor(base) {
+      const corridorWidthInput = Number(document.getElementById('corridor-width').value) || 100;
+      const cw = clampNumber(corridorWidthInput, 80, 140);
+      const entrySide = document.getElementById('entry-side').value || 'south';
+      const placed = packRooms(base);
+      let width = Math.max(placed.width, 400);
+      let height = Math.max(placed.height, 300);
+      const entryDepth = clampNumber(height * 0.18, 120, 160);
+      const entryWidth = clampNumber(width * 0.3, 100, 140);
+
+      let entry = null;
+      let corridor = null;
+
+      if (entrySide === 'south') {
+        const entryX = (width - entryWidth) / 2;
+        const entryY = height;
+        const corridorDepth = height * 0.65;
+        const corridorX = (width - cw) / 2;
+        const corridorY = entryY - corridorDepth;
+        corridor = { id: 'corridor', name: '廊下', type: 'corridor', width: cw, depth: corridorDepth, x: corridorX, y: corridorY, tatami: 0 };
+        entry = { id: 'entry', name: '玄関', type: 'entry', width: entryWidth, depth: entryDepth, x: entryX, y: entryY, tatami: 0 };
+        height = entryY + entryDepth;
+      } else if (entrySide === 'east') {
+        const entryX = width;
+        const entryY = (height - entryWidth) / 2;
+        const corridorDepth = Math.max(height * 0.65, 250);
+        const corridorX = entryX - Math.min(cw, entryWidth);
+        const corridorY = (height - corridorDepth) / 2;
+        corridor = { id: 'corridor', name: '廊下', type: 'corridor', width: cw, depth: corridorDepth, x: corridorX - cw, y: corridorY, tatami: 0 };
+        entry = { id: 'entry', name: '玄関', type: 'entry', width: entryDepth, depth: entryWidth, x: entryX, y: entryY, tatami: 0 };
+        width = entryX + entryDepth;
+      } else {
+        const entryX = -entryDepth;
+        const entryY = (height - entryWidth) / 2;
+        const corridorDepth = Math.max(height * 0.65, 250);
+        const corridorX = entryX + entryDepth;
+        const corridorY = (height - corridorDepth) / 2;
+        corridor = { id: 'corridor', name: '廊下', type: 'corridor', width: cw, depth: corridorDepth, x: corridorX, y: corridorY, tatami: 0 };
+        entry = { id: 'entry', name: '玄関', type: 'entry', width: entryDepth, depth: entryWidth, x: entryX, y: entryY, tatami: 0 };
+        width = Math.max(width, entryWidth + entryDepth + placed.width);
+      }
+
+      // shift existing rooms if entry expands negative x
+      const shiftX = Math.max(0, -(entry.x || 0));
+      const shiftY = Math.max(0, -(entry.y || 0));
+      placed.rooms.forEach(r => { r.x += shiftX; r.y += shiftY; });
+      if (entry) { entry.x += shiftX; entry.y += shiftY; }
+      if (corridor) { corridor.x += shiftX; corridor.y += shiftY; }
+      width += shiftX;
+      height += shiftY;
+
+      const allRooms = [...placed.rooms];
+      if (corridor) allRooms.push(corridor);
+      if (entry) allRooms.push(entry);
+      return { rooms: allRooms, width, height, entry, corridor };
+    }
+
+    function generateDoors(rooms, entry, corridor) {
+      const doors = [];
+      if (!corridor) return doors;
+      const doorWidth = 80;
+      function addDoor(fromId, toId, wall, offset, kind = 'hinge') {
+        doors.push({ fromRoomId: fromId, toRoomId: toId, wall, offset, width: doorWidth, kind });
+      }
+
+      if (entry) {
+        const wall = (document.getElementById('entry-side').value || 'south');
+        const offset = wall === 'south'
+          ? entry.width / 2
+          : entry.depth / 2;
+        addDoor(entry.id, corridor.id, wall === 'south' ? 'north' : (wall === 'east' ? 'west' : 'east'), offset, 'hinge');
+      }
+
+      const corridorRect = { x: corridor.x, y: corridor.y, w: corridor.width, h: corridor.depth };
+      rooms.forEach(room => {
+        if (room.id === corridor.id || room.id === (entry && entry.id)) return;
+        const requiresCorridor = ['toilet', 'bath', 'wash'].includes(room.type) || room.access === 'corridor';
+        if (!requiresCorridor && room.access === 'direct') return;
+        const center = { x: room.x + room.width / 2, y: room.y + room.depth / 2 };
+        let wall = 'east';
+        if (center.x < corridorRect.x) wall = 'west';
+        else if (center.x > corridorRect.x + corridorRect.w) wall = 'east';
+        else if (center.y < corridorRect.y) wall = 'north';
+        else wall = 'south';
+        if (wall === 'west' || wall === 'east') {
+          const overlapTop = Math.max(room.y, corridorRect.y);
+          const overlapBottom = Math.min(room.y + room.depth, corridorRect.y + corridorRect.h);
+          const offsetY = overlapTop + (overlapBottom - overlapTop) / 2 - corridorRect.y;
+          const offClamped = clampNumber(offsetY, doorWidth / 2, corridorRect.h - doorWidth / 2);
+          addDoor(corridor.id, room.id, wall, offClamped, room.type === 'wash' ? 'sliding' : 'hinge');
+        } else {
+          const overlapLeft = Math.max(room.x, corridorRect.x);
+          const overlapRight = Math.min(room.x + room.width, corridorRect.x + corridorRect.w);
+          const offsetX = overlapLeft + (overlapRight - overlapLeft) / 2 - corridorRect.x;
+          const offClamped = clampNumber(offsetX, doorWidth / 2, corridorRect.w - doorWidth / 2);
+          addDoor(corridor.id, room.id, wall, offClamped, room.type === 'wash' ? 'sliding' : 'hinge');
+        }
+      });
+      return doors;
+    }
+
+    function drawSvg() {
+      const padding = 40;
+      const viewW = 1000;
+      const viewH = 720;
+      const scale = Math.min(
+        (viewW - padding * 2) / state.layoutWidth,
+        (viewH - padding * 2) / state.layoutDepth
+      );
+      state.scale = scale;
+      const outerW = state.layoutWidth * scale;
+      const outerH = state.layoutDepth * scale;
+      const startX = (viewW - outerW) / 2;
+      const startY = (viewH - outerH) / 2;
+
+      const ns = 'http://www.w3.org/2000/svg';
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+      const grid = document.createElementNS(ns, 'g');
+      grid.setAttribute('stroke', '#e5e7eb');
+      grid.setAttribute('stroke-width', '1');
+      const gridStep = 50 * scale;
+      for (let gx = startX; gx <= startX + outerW; gx += gridStep) {
+        const line = document.createElementNS(ns, 'line');
+        line.setAttribute('x1', gx); line.setAttribute('y1', startY); line.setAttribute('x2', gx); line.setAttribute('y2', startY + outerH);
+        grid.appendChild(line);
+      }
+      for (let gy = startY; gy <= startY + outerH; gy += gridStep) {
+        const line = document.createElementNS(ns, 'line');
+        line.setAttribute('x1', startX); line.setAttribute('y1', gy); line.setAttribute('x2', startX + outerW); line.setAttribute('y2', gy);
+        grid.appendChild(line);
+      }
+      svg.appendChild(grid);
+
+      const outer = document.createElementNS(ns, 'rect');
+      outer.setAttribute('x', startX); outer.setAttribute('y', startY); outer.setAttribute('width', outerW); outer.setAttribute('height', outerH);
+      outer.setAttribute('fill', '#fff'); outer.setAttribute('stroke', '#1f2937'); outer.setAttribute('stroke-width', 5);
+      svg.appendChild(outer);
+
+      state.rooms.forEach(room => {
+        const x = startX + room.x * scale;
+        const y = startY + room.y * scale;
+        const w = room.width * scale;
+        const h = room.depth * scale;
+        const r = document.createElementNS(ns, 'rect');
+        r.setAttribute('x', x); r.setAttribute('y', y); r.setAttribute('width', w); r.setAttribute('height', h);
+        r.setAttribute('fill', '#f8fafc');
+        r.setAttribute('stroke', '#94a3b8');
+        r.setAttribute('stroke-width', 2);
+        svg.appendChild(r);
+
+        const text = document.createElementNS(ns, 'text');
+        text.setAttribute('x', x + 8); text.setAttribute('y', y + 20);
+        text.setAttribute('fill', '#0f172a'); text.setAttribute('font-size', '14'); text.setAttribute('font-weight', '700');
+        text.textContent = `${room.name}${room.tatami ? ` ${room.tatami}畳` : ''}`;
+        svg.appendChild(text);
+      });
+
+      const dimGroup = document.createElementNS(ns, 'g');
+      dimGroup.setAttribute('stroke', '#334155');
+      dimGroup.setAttribute('stroke-width', 1);
+      dimGroup.setAttribute('fill', '#334155');
+      function addDim(x1, y1, x2, y2, label) {
+        const line = document.createElementNS(ns, 'line');
+        line.setAttribute('x1', x1); line.setAttribute('y1', y1); line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+        line.setAttribute('stroke-dasharray', '4 3');
+        dimGroup.appendChild(line);
+        const text = document.createElementNS(ns, 'text');
+        text.setAttribute('x', (x1 + x2) / 2); text.setAttribute('y', (y1 + y2) / 2 - 6);
+        text.setAttribute('text-anchor', 'middle'); text.setAttribute('font-size', '12');
+        text.textContent = label; dimGroup.appendChild(text);
+      }
+      addDim(startX, startY - 14, startX + outerW, startY - 14, `${Math.round(state.layoutWidth)}cm`);
+      addDim(startX - 14, startY, startX - 14, startY + outerH, `${Math.round(state.layoutDepth)}cm`);
+      svg.appendChild(dimGroup);
+
+      const arrow = document.createElementNS(ns, 'g');
+      arrow.setAttribute('transform', `translate(${startX + outerW - 60}, ${startY + 30})`);
+      const tri = document.createElementNS(ns, 'polygon');
+      tri.setAttribute('points', '0,0 20,0 10,-20'); tri.setAttribute('fill', '#1f2937'); arrow.appendChild(tri);
+      const northText = document.createElementNS(ns, 'text');
+      northText.setAttribute('x', 10); northText.setAttribute('y', 20); northText.setAttribute('text-anchor', 'middle'); northText.setAttribute('font-size', '12');
+      northText.textContent = 'N'; arrow.appendChild(northText); svg.appendChild(arrow);
+
+      drawDoors(svg, startX, startY);
+      drawFurniture(svg, startX, startY);
+    }
+
+    function drawDoors(svgRoot, startX, startY) {
+      const ns = 'http://www.w3.org/2000/svg';
+      state.doors.forEach(door => {
+        const room = state.rooms.find(r => r.id === door.fromRoomId);
+        const target = state.rooms.find(r => r.id === door.toRoomId);
+        if (!room || !target) return;
+        const rect = { x: room.x, y: room.y, w: room.width, h: room.depth };
+        let dx = rect.x, dy = rect.y;
+        if (door.wall === 'north') {
+          dx += door.offset - door.width / 2;
+        } else if (door.wall === 'south') {
+          dx += door.offset - door.width / 2;
+          dy += rect.h;
+        } else if (door.wall === 'east') {
+          dx += rect.w;
+          dy += door.offset - door.width / 2;
+        } else if (door.wall === 'west') {
+          dy += door.offset - door.width / 2;
+        }
+        const sx = startX + dx * state.scale;
+        const sy = startY + dy * state.scale;
+        const dw = door.width * state.scale;
+        const line = document.createElementNS(ns, 'line');
+        if (door.wall === 'north' || door.wall === 'south') {
+          line.setAttribute('x1', sx); line.setAttribute('y1', sy);
+          line.setAttribute('x2', sx + dw); line.setAttribute('y2', sy);
+        } else {
+          line.setAttribute('x1', sx); line.setAttribute('y1', sy);
+          line.setAttribute('x2', sx); line.setAttribute('y2', sy + dw);
+        }
+        line.setAttribute('stroke', '#111827');
+        line.setAttribute('stroke-width', 2);
+        svgRoot.appendChild(line);
+
+        if (door.kind === 'hinge') {
+          const arc = document.createElementNS(ns, 'path');
+          const radius = 40 * state.scale;
+          if (door.wall === 'north') {
+            arc.setAttribute('d', `M ${sx} ${sy} A ${radius} ${radius} 0 0 1 ${sx + radius} ${sy + radius}`);
+          } else if (door.wall === 'south') {
+            arc.setAttribute('d', `M ${sx} ${sy} A ${radius} ${radius} 0 0 0 ${sx + radius} ${sy - radius}`);
+          } else if (door.wall === 'east') {
+            arc.setAttribute('d', `M ${sx} ${sy} A ${radius} ${radius} 0 0 1 ${sx - radius} ${sy + radius}`);
+          } else {
+            arc.setAttribute('d', `M ${sx} ${sy} A ${radius} ${radius} 0 0 0 ${sx + radius} ${sy + radius}`);
+          }
+          arc.setAttribute('stroke', '#111827');
+          arc.setAttribute('fill', 'none');
+          arc.setAttribute('stroke-width', 1.5);
+          svgRoot.appendChild(arc);
+        } else {
+          const slide = document.createElementNS(ns, 'line');
+          if (door.wall === 'north' || door.wall === 'south') {
+            slide.setAttribute('x1', sx); slide.setAttribute('y1', sy - 6);
+            slide.setAttribute('x2', sx + dw); slide.setAttribute('y2', sy - 6);
+          } else {
+            slide.setAttribute('x1', sx - 6); slide.setAttribute('y1', sy);
+            slide.setAttribute('x2', sx - 6); slide.setAttribute('y2', sy + dw);
+          }
+          slide.setAttribute('stroke', '#2563eb');
+          slide.setAttribute('stroke-width', 2);
+          svgRoot.appendChild(slide);
+        }
+      });
+    }
+
+    function furnitureBounds(item) {
+      const rot = item.rotation % 180 !== 0;
+      const w = rot ? item.depth : item.width;
+      const h = rot ? item.width : item.depth;
+      return { w, h };
+    }
+
+    function drawFurniture(svgRoot, startX, startY) {
+      const ns = 'http://www.w3.org/2000/svg';
+      state.furniture.forEach(item => {
+        const { w, h } = furnitureBounds(item);
+        const sx = startX + item.x * state.scale;
+        const sy = startY + item.y * state.scale;
+        const sw = w * state.scale;
+        const sh = h * state.scale;
+
+        const rect = document.createElementNS(ns, 'rect');
+        rect.setAttribute('x', sx);
+        rect.setAttribute('y', sy);
+        rect.setAttribute('width', sw);
+        rect.setAttribute('height', sh);
+        rect.setAttribute('rx', 6);
+        rect.setAttribute('fill', item.color || '#fde68a');
+        rect.setAttribute('stroke-width', 2);
+
+        const overlap = checkOverlap(item);
+        const outside = checkOutside(item);
+        if (outside) {
+          rect.setAttribute('stroke', '#ef4444');
+          rect.setAttribute('fill', '#fee2e2');
+        } else if (overlap) {
+          rect.setAttribute('stroke', '#f59e0b');
+          rect.setAttribute('fill', '#fef9c3');
+        } else {
+          rect.setAttribute('stroke', '#1f2937');
+        }
+        rect.dataset.id = item.id;
+        rect.style.cursor = 'move';
+        svgRoot.appendChild(rect);
+
+        const label = document.createElementNS(ns, 'text');
+        label.setAttribute('x', sx + 6);
+        label.setAttribute('y', sy + 16);
+        label.setAttribute('font-size', '12');
+        label.setAttribute('fill', '#0f172a');
+        label.textContent = `${iconFor(item.category)} ${item.name}`;
+        svgRoot.appendChild(label);
+      });
+    }
+
+    function iconFor(category) {
+      switch (category) {
+        case 'bed': return '🛏';
+        case 'sofa': return '🛋';
+        case 'table': return '🪑';
+        case 'desk': return '💻';
+        case 'storage': return '🗄';
+        default: return '📦';
+      }
+    }
+
+    function checkOutside(item) {
+      const { w, h } = furnitureBounds(item);
+      if (item.x < 0 || item.y < 0) return true;
+      if (item.x + w > state.layoutWidth) return true;
+      if (item.y + h > state.layoutDepth) return true;
+      return false;
+    }
+
+    function checkOverlap(target) {
+      const tb = furnitureBounds(target);
+      return state.furniture.some(other => {
+        if (other.id === target.id) return false;
+        const ob = furnitureBounds(other);
+        return !(
+          target.x + tb.w <= other.x ||
+          other.x + ob.w <= target.x ||
+          target.y + tb.h <= other.y ||
+          other.y + ob.h <= target.y
+        );
+      });
+    }
+
+    function addRoomJsonToState() {
+      const rooms = parseRooms();
+      if (!rooms) return;
+      const auto = document.getElementById('auto-corridor').checked;
+      if (auto) {
+        const baseRooms = rooms.filter(r => !['entry', 'corridor', 'hall'].includes(r.type));
+        const result = generateEntryAndCorridor(baseRooms);
+        state.rooms = result.rooms;
+        state.layoutWidth = result.width;
+        state.layoutDepth = result.height;
+        state.doors = generateDoors(state.rooms, result.entry, result.corridor);
+      } else {
+        const result = packRooms(rooms);
+        state.rooms = result.rooms;
+        state.layoutWidth = result.width;
+        state.layoutDepth = result.height;
+        state.doors = rooms.flatMap(r => r.doors || []);
+      }
+      state.furniture = [];
+      drawSvg();
+      updateList();
+      statusText.textContent = '部屋を更新しました';
+    }
+
+    document.getElementById('load-sample').addEventListener('click', loadSampleRooms);
+    document.getElementById('apply-rooms').addEventListener('click', addRoomJsonToState);
+
+    const LS_KEY = 'room-planner-state';
+    document.getElementById('save-local').addEventListener('click', () => {
+      const payload = {
+        rooms: state.rooms,
+        layoutWidth: state.layoutWidth,
+        layoutDepth: state.layoutDepth,
+        furniture: state.furniture,
+        doors: state.doors
+      };
+      localStorage.setItem(LS_KEY, JSON.stringify(payload));
+      statusText.textContent = '保存しました';
+    });
+
+    document.getElementById('load-local').addEventListener('click', () => {
+      const raw = localStorage.getItem(LS_KEY);
+      if (!raw) return alert('保存されたデータがありません');
+      const data = JSON.parse(raw);
+      state.rooms = data.rooms || [];
+      state.layoutWidth = data.layoutWidth || 600;
+      state.layoutDepth = data.layoutDepth || 400;
+      state.furniture = data.furniture || [];
+      state.doors = data.doors || [];
+      drawSvg();
+      updateList();
+      document.getElementById('rooms-json').value = JSON.stringify({ rooms: state.rooms }, null, 2);
+      statusText.textContent = '復元しました';
+    });
+
+    snapSelect.addEventListener('change', (e) => {
+      state.snap = Number(e.target.value);
+    });
 
     function pickFurniture(roomX, roomY) {
       for (let i = state.furniture.length - 1; i >= 0; i--) {
         const item = state.furniture[i];
-        if (roomX >= item.x && roomX <= item.x + item.width && roomY >= item.y && roomY <= item.y + item.depth) {
+        const { w, h } = furnitureBounds(item);
+        if (roomX >= item.x && roomX <= item.x + w && roomY >= item.y && roomY <= item.y + h) {
           return item;
         }
       }
@@ -431,50 +894,65 @@
     }
 
     function toRoomCoords(event) {
-      const rect = canvas.getBoundingClientRect();
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      const canvasX = (event.clientX - rect.left) * scaleX;
-      const canvasY = (event.clientY - rect.top) * scaleY;
+      const rect = svg.getBoundingClientRect();
+      const viewBox = svg.viewBox.baseVal;
+      const sx = ((event.clientX - rect.left) / rect.width) * viewBox.width;
+      const sy = ((event.clientY - rect.top) / rect.height) * viewBox.height;
+      const viewW = 1000;
+      const viewH = 720;
+      const outerW = state.layoutWidth * state.scale;
+      const outerH = state.layoutDepth * state.scale;
+      const startX = (viewW - outerW) / 2;
+      const startY = (viewH - outerH) / 2;
       return {
-        x: (canvasX - 20) / state.scale,
-        y: (canvasY - 20) / state.scale
+        x: (sx - startX) / state.scale,
+        y: (sy - startY) / state.scale
       };
     }
 
-    canvas.addEventListener('mousedown', (event) => {
+    let draggingId = null;
+    let dragOffset = { x: 0, y: 0 };
+
+    svg.addEventListener('mousedown', (event) => {
       const { x, y } = toRoomCoords(event);
       const target = pickFurniture(x, y);
       if (target) {
         draggingId = target.id;
         dragOffset = { x: x - target.x, y: y - target.y };
-        canvas.style.cursor = 'grabbing';
+        svg.style.cursor = 'grabbing';
       }
     });
 
-    canvas.addEventListener('mousemove', (event) => {
+    svg.addEventListener('mousemove', (event) => {
       if (!draggingId) return;
       const { x, y } = toRoomCoords(event);
       const item = state.furniture.find(f => f.id === draggingId);
       if (!item) return;
-
-      item.x = clamp(x - dragOffset.x, 0, Math.max(state.roomWidth - item.width, 0));
-      item.y = clamp(y - dragOffset.y, 0, Math.max(state.roomDepth - item.depth, 0));
-      drawRoom();
+      const { w, h } = furnitureBounds(item);
+      const snappedX = Math.round((x - dragOffset.x) / state.snap) * state.snap;
+      const snappedY = Math.round((y - dragOffset.y) / state.snap) * state.snap;
+      item.x = clamp(snappedX, 0, Math.max(state.layoutWidth - w, 0));
+      item.y = clamp(snappedY, 0, Math.max(state.layoutDepth - h, 0));
+      drawSvg();
     });
 
-    function stopDragging() {
-      draggingId = null;
-      canvas.style.cursor = 'default';
-    }
+    function stopDragging() { draggingId = null; svg.style.cursor = 'default'; }
+    ['mouseup', 'mouseleave'].forEach(evt => svg.addEventListener(evt, stopDragging));
 
-    ['mouseup', 'mouseleave'].forEach(evt => {
-      canvas.addEventListener(evt, stopDragging);
+    layoutSelect.addEventListener('change', (event) => {
+      const key = event.target.value;
+      if (!key) { state.presetAreas = []; drawSvg(); return; }
+      const preset = PRESETS[key];
+      if (!preset) return;
+      state.rooms = preset.areas.map((a, idx) => ({ id: `preset-${idx}`, name: a.name, width: a.width, depth: a.depth, tatami: 0, x: a.x, y: a.y }));
+      state.layoutWidth = preset.roomWidth;
+      state.layoutDepth = preset.roomDepth;
+      drawSvg();
     });
 
-    // Initial render
-    updateList();
-    drawRoom();
+    // 初期表示
+    loadSampleRooms();
+    addRoomJsonToState();
   </script>
 </body>
 </html>
