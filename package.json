@@ -1,0 +1,14 @@
+{
+  "name": "sample_home",
+  "version": "1.0.0",
+  "description": "家具配置を試行錯誤できるシンプルなブラウザアプリです。部屋の寸法と家具サイズを入力して、ドラッグ＆ドロップでレイアウトを組み合わせられます。",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests/smoke.test.js",
+    "test:ci": "node tests/playwright.ci.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
