@@ -227,6 +227,11 @@
         </select>
         <span id="status-text" class="muted-pill">準備完了</span>
       </div>
+      <div class="controls-row">
+        <label class="muted">デバッグ表示</label>
+        <input type="checkbox" id="debug-toggle">
+        <span class="inline-note">free領域を薄色表示、配置できなかった部屋を赤枠表示</span>
+      </div>
     </section>
 
     <section class="svg-wrapper" aria-label="レイアウトキャンバス">
@@ -249,7 +254,10 @@
       layoutWidth: 600,
       layoutDepth: 400,
       snap: 10,
-      doors: []
+      doors: [],
+      freeSpaces: [],
+      failedRoom: null,
+      debug: false
     };
 
     const PRESETS = {
@@ -301,6 +309,7 @@
     const svg = document.getElementById('plan-svg');
     const snapSelect = document.getElementById('snap-size');
     const statusText = document.getElementById('status-text');
+    const debugToggle = document.getElementById('debug-toggle');
 
     function randomColor() {
       const palette = ['#f97316', '#10b981', '#3b82f6', '#f43f5e', '#eab308', '#06b6d4'];
@@ -460,87 +469,160 @@
       }
     }
 
-    function packRooms(rooms) {
-      if (!rooms.length) return { rooms: [], width: 0, height: 0 };
-      const sorted = [...rooms].sort((a, b) => PRIORITY_ORDER.indexOf(a.priority) - PRIORITY_ORDER.indexOf(b.priority));
-      const totalArea = sorted.reduce((sum, r) => sum + r.width * r.depth, 0);
-      const targetRowWidth = Math.max(Math.sqrt(totalArea), Math.max(...sorted.map(r => r.width)) * 1.2);
-      let x = 0; let y = 0; let rowHeight = 0; let maxWidth = 0;
-      sorted.forEach(room => {
-        if (x + room.width > targetRowWidth && x > 0) {
-          y += rowHeight;
-          x = 0;
-          rowHeight = 0;
+    function clampNumber(val, min, max) { return Math.min(Math.max(val, min), max); }
+
+    function rectFrom(room) {
+      return { x: room.x, y: room.y, w: room.width, h: room.depth, id: room.id };
+    }
+
+    function intersects(a, b) {
+      return !(a.x + a.w <= b.x || b.x + b.w <= a.x || a.y + a.h <= b.y || b.y + b.h <= a.y);
+    }
+
+    function contains(container, rect) {
+      return rect.x >= container.x && rect.y >= container.y &&
+        rect.x + rect.w <= container.x + container.w &&
+        rect.y + rect.h <= container.y + container.h;
+    }
+
+    function subtractRect(spaces, cut) {
+      const result = [];
+      spaces.forEach(space => {
+        if (!intersects(space, cut)) {
+          result.push(space);
+          return;
         }
-        room.x = x;
-        room.y = y;
-        x += room.width;
-        rowHeight = Math.max(rowHeight, room.depth);
-        maxWidth = Math.max(maxWidth, x);
+        // top
+        if (cut.y > space.y) {
+          result.push({ x: space.x, y: space.y, w: space.w, h: cut.y - space.y });
+        }
+        // bottom
+        if (cut.y + cut.h < space.y + space.h) {
+          result.push({ x: space.x, y: cut.y + cut.h, w: space.w, h: (space.y + space.h) - (cut.y + cut.h) });
+        }
+        // left
+        const overlapTop = Math.max(space.y, cut.y);
+        const overlapBottom = Math.min(space.y + space.h, cut.y + cut.h);
+        if (cut.x > space.x) {
+          result.push({ x: space.x, y: overlapTop, w: cut.x - space.x, h: overlapBottom - overlapTop });
+        }
+        // right
+        if (cut.x + cut.h < space.x + space.w) {
+          const left = cut.x + cut.w;
+          result.push({ x: left, y: overlapTop, w: (space.x + space.w) - left, h: overlapBottom - overlapTop });
+        }
       });
-      const totalHeight = y + rowHeight;
-      return { rooms: sorted, width: maxWidth, height: totalHeight };
+      return result.filter(r => r.w > 0 && r.h > 0);
     }
 
-    function clampNumber(val, min, max) {
-      return Math.min(Math.max(val, min), max);
+    function initialContainer(rooms) {
+      const totalArea = rooms.reduce((s, r) => s + r.width * r.depth, 0);
+      const base = Math.max(600, Math.sqrt(totalArea) * 1.3);
+      return { x: 0, y: 0, w: base, h: base * 0.8 };
     }
 
-    function generateEntryAndCorridor(base) {
-      const corridorWidthInput = Number(document.getElementById('corridor-width').value) || 100;
-      const cw = clampNumber(corridorWidthInput, 80, 140);
-      const entrySide = document.getElementById('entry-side').value || 'south';
-      const placed = packRooms(base);
-      let width = Math.max(placed.width, 400);
-      let height = Math.max(placed.height, 300);
-      const entryDepth = clampNumber(height * 0.18, 120, 160);
-      const entryWidth = clampNumber(width * 0.3, 100, 140);
+    function generateEntryCorridor(container) {
+      const cwInput = Number(document.getElementById('corridor-width').value) || 100;
+      const corridorWidth = clampNumber(cwInput, 80, 140);
+      const entryWidth = 120;
+      const entryDepth = 140;
+      const entryX = (container.w - entryWidth) / 2;
+      const entryY = container.h - entryDepth;
+      const entry = { id: 'entry', name: '玄関', type: 'entry', width: entryWidth, depth: entryDepth, x: entryX, y: entryY, tatami: 0 };
+      const corridorHeight = Math.max(container.h * 0.45, 250);
+      const corridorX = (container.w - corridorWidth) / 2;
+      const corridorY = Math.max(container.y, entryY - corridorHeight);
+      const corridor = { id: 'corridor', name: '廊下', type: 'corridor', width: corridorWidth, depth: entryY - corridorY, x: corridorX, y: corridorY, tatami: 0 };
+      return { entry, corridor };
+    }
 
-      let entry = null;
-      let corridor = null;
+    function orderedRooms(rooms) {
+      const typeOrder = ['wash', 'toilet', 'bath', 'living', 'kitchen', 'bedroom'];
+      return [...rooms].sort((a, b) => {
+        const pa = typeOrder.indexOf(a.type);
+        const pb = typeOrder.indexOf(b.type);
+        if (pa !== pb) return (pa === -1 ? 999 : pa) - (pb === -1 ? 999 : pb);
+        return PRIORITY_ORDER.indexOf(a.priority) - PRIORITY_ORDER.indexOf(b.priority);
+      });
+    }
 
-      if (entrySide === 'south') {
-        const entryX = (width - entryWidth) / 2;
-        const entryY = height;
-        const corridorDepth = height * 0.65;
-        const corridorX = (width - cw) / 2;
-        const corridorY = entryY - corridorDepth;
-        corridor = { id: 'corridor', name: '廊下', type: 'corridor', width: cw, depth: corridorDepth, x: corridorX, y: corridorY, tatami: 0 };
-        entry = { id: 'entry', name: '玄関', type: 'entry', width: entryWidth, depth: entryDepth, x: entryX, y: entryY, tatami: 0 };
-        height = entryY + entryDepth;
-      } else if (entrySide === 'east') {
-        const entryX = width;
-        const entryY = (height - entryWidth) / 2;
-        const corridorDepth = Math.max(height * 0.65, 250);
-        const corridorX = entryX - Math.min(cw, entryWidth);
-        const corridorY = (height - corridorDepth) / 2;
-        corridor = { id: 'corridor', name: '廊下', type: 'corridor', width: cw, depth: corridorDepth, x: corridorX - cw, y: corridorY, tatami: 0 };
-        entry = { id: 'entry', name: '玄関', type: 'entry', width: entryDepth, depth: entryWidth, x: entryX, y: entryY, tatami: 0 };
-        width = entryX + entryDepth;
-      } else {
-        const entryX = -entryDepth;
-        const entryY = (height - entryWidth) / 2;
-        const corridorDepth = Math.max(height * 0.65, 250);
-        const corridorX = entryX + entryDepth;
-        const corridorY = (height - corridorDepth) / 2;
-        corridor = { id: 'corridor', name: '廊下', type: 'corridor', width: cw, depth: corridorDepth, x: corridorX, y: corridorY, tatami: 0 };
-        entry = { id: 'entry', name: '玄関', type: 'entry', width: entryDepth, depth: entryWidth, x: entryX, y: entryY, tatami: 0 };
-        width = Math.max(width, entryWidth + entryDepth + placed.width);
+    function sortSpacesByPriority(spaces, priority) {
+      return [...spaces].sort((a, b) => {
+        function score(s) {
+          switch (priority) {
+            case '北': return s.y;
+            case '南': return -s.y;
+            case '西': return s.x;
+            case '東': return -s.x;
+            default: return 0;
+          }
+        }
+        return score(a) - score(b);
+      });
+    }
+
+    function placeRoomInSpace(room, space) {
+      let x = space.x;
+      let y = space.y;
+      switch (room.priority) {
+        case '南': y = space.y + space.h - room.depth; break;
+        case '北': y = space.y; break;
+        case '東': x = space.x + space.w - room.width; break;
+        case '西': x = space.x; break;
+        default:
+          x = space.x + (space.w - room.width) / 2;
+          y = space.y + (space.h - room.depth) / 2;
       }
+      return { x, y, w: room.width, h: room.depth };
+    }
 
-      // shift existing rooms if entry expands negative x
-      const shiftX = Math.max(0, -(entry.x || 0));
-      const shiftY = Math.max(0, -(entry.y || 0));
-      placed.rooms.forEach(r => { r.x += shiftX; r.y += shiftY; });
-      if (entry) { entry.x += shiftX; entry.y += shiftY; }
-      if (corridor) { corridor.x += shiftX; corridor.y += shiftY; }
-      width += shiftX;
-      height += shiftY;
+    function generateLayout(baseRooms) {
+      const container = initialContainer(baseRooms);
+      const { entry, corridor } = generateEntryCorridor(container);
+      let free = subtractRect([container], { x: entry.x, y: entry.y, w: entry.width, h: entry.depth });
+      free = subtractRect(free, { x: corridor.x, y: corridor.y, w: corridor.width, h: corridor.depth });
 
-      const allRooms = [...placed.rooms];
-      if (corridor) allRooms.push(corridor);
-      if (entry) allRooms.push(entry);
-      return { rooms: allRooms, width, height, entry, corridor };
+      let bestFail = null;
+      for (let attempt = 0; attempt < 30; attempt++) {
+        const placed = [entry, corridor];
+        let roomsPlaced = true;
+        let freeSpaces = JSON.parse(JSON.stringify(free));
+        const sortedRooms = orderedRooms(baseRooms);
+        for (const room of sortedRooms) {
+          const candidates = sortSpacesByPriority(freeSpaces, room.priority);
+          let placedRoom = null;
+          for (const space of candidates) {
+            if (room.width > space.w || room.depth > space.h) continue;
+            const rect = placeRoomInSpace(room, space);
+            const rectObj = { ...rect, id: room.id };
+            if (!contains(space, rectObj)) continue;
+            const collision = placed.some(p => intersects(rectObj, rectFrom(p)));
+            if (collision) continue;
+            placedRoom = { ...room, x: rect.x, y: rect.y };
+            placed.push(placedRoom);
+            freeSpaces = subtractRect(freeSpaces, rectObj);
+            break;
+          }
+          if (!placedRoom) {
+            roomsPlaced = false;
+            bestFail = room;
+            break;
+          }
+        }
+        if (roomsPlaced) {
+          const others = placed.filter(r => r.id !== 'entry' && r.id !== 'corridor');
+          const maxX = Math.max(...placed.map(r => r.x + r.width));
+          const maxY = Math.max(...placed.map(r => r.y + r.depth));
+          state.layoutWidth = Math.max(container.w, maxX);
+          state.layoutDepth = Math.max(container.h, maxY);
+          state.rooms = placed;
+          state.freeSpaces = debugToggle.checked ? freeSpaces : [];
+          state.failedRoom = null;
+          return { entry, corridor, freeSpaces };
+        }
+      }
+      state.failedRoom = bestFail;
+      return null;
     }
 
     function generateDoors(rooms, entry, corridor) {
@@ -625,6 +707,21 @@
       outer.setAttribute('fill', '#fff'); outer.setAttribute('stroke', '#1f2937'); outer.setAttribute('stroke-width', 5);
       svg.appendChild(outer);
 
+      if (state.debug && state.freeSpaces?.length) {
+        const g = document.createElementNS(ns, 'g');
+        state.freeSpaces.forEach(f => {
+          const r = document.createElementNS(ns, 'rect');
+          r.setAttribute('x', startX + f.x * scale);
+          r.setAttribute('y', startY + f.y * scale);
+          r.setAttribute('width', f.w * scale);
+          r.setAttribute('height', f.h * scale);
+          r.setAttribute('fill', '#c7d2fe');
+          r.setAttribute('opacity', '0.25');
+          g.appendChild(r);
+        });
+        svg.appendChild(g);
+      }
+
       state.rooms.forEach(room => {
         const x = startX + room.x * scale;
         const y = startY + room.y * scale;
@@ -633,8 +730,13 @@
         const r = document.createElementNS(ns, 'rect');
         r.setAttribute('x', x); r.setAttribute('y', y); r.setAttribute('width', w); r.setAttribute('height', h);
         r.setAttribute('fill', '#f8fafc');
-        r.setAttribute('stroke', '#94a3b8');
-        r.setAttribute('stroke-width', 2);
+        if (state.failedRoom && state.failedRoom.id === room.id) {
+          r.setAttribute('stroke', '#ef4444');
+          r.setAttribute('stroke-width', 3);
+        } else {
+          r.setAttribute('stroke', '#94a3b8');
+          r.setAttribute('stroke-width', 2);
+        }
         svg.appendChild(r);
 
         const text = document.createElementNS(ns, 'text');
@@ -829,22 +931,28 @@
       const auto = document.getElementById('auto-corridor').checked;
       if (auto) {
         const baseRooms = rooms.filter(r => !['entry', 'corridor', 'hall'].includes(r.type));
-        const result = generateEntryAndCorridor(baseRooms);
-        state.rooms = result.rooms;
-        state.layoutWidth = result.width;
-        state.layoutDepth = result.height;
+        const result = generateLayout(baseRooms);
+        if (!result) {
+          statusText.textContent = state.failedRoom
+            ? `配置に失敗: ${state.failedRoom.name || state.failedRoom.id} が収まりません`
+            : '配置に失敗しました';
+          statusText.style.background = '#fee2e2';
+          statusText.style.color = '#b91c1c';
+          return;
+        }
         state.doors = generateDoors(state.rooms, result.entry, result.corridor);
       } else {
-        const result = packRooms(rooms);
-        state.rooms = result.rooms;
-        state.layoutWidth = result.width;
-        state.layoutDepth = result.height;
+        state.rooms = rooms;
+        state.layoutWidth = Math.max(...rooms.map(r => r.x + r.width), 600);
+        state.layoutDepth = Math.max(...rooms.map(r => r.y + r.depth), 400);
         state.doors = rooms.flatMap(r => r.doors || []);
       }
       state.furniture = [];
       drawSvg();
       updateList();
       statusText.textContent = '部屋を更新しました';
+      statusText.style.background = '#eef2ff';
+      statusText.style.color = '#4338ca';
     }
 
     document.getElementById('load-sample').addEventListener('click', loadSampleRooms);
@@ -880,6 +988,10 @@
 
     snapSelect.addEventListener('change', (e) => {
       state.snap = Number(e.target.value);
+    });
+    debugToggle.addEventListener('change', (e) => {
+      state.debug = e.target.checked;
+      drawSvg();
     });
 
     function pickFurniture(roomX, roomY) {
